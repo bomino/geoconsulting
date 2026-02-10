@@ -30,8 +30,9 @@ def archive_contacts(modeladmin, request, queryset):
 
 @admin.action(description="Exporter en CSV")
 def export_contacts_csv(modeladmin, request, queryset):
-    response = HttpResponse(content_type="text/csv")
+    response = HttpResponse(content_type="text/csv; charset=utf-8")
     response["Content-Disposition"] = 'attachment; filename="contacts.csv"'
+    response.write("\ufeff")
     writer = csv.writer(response)
     writer.writerow(["Nom", "Email", "Téléphone", "Sujet", "Message", "Statut", "Date"])
     for contact in queryset:
@@ -63,6 +64,14 @@ class ContactAdmin(ModelAdmin):
     search_fields = ("name", "email", "subject", "message")
     readonly_fields = ("name", "email", "phone", "subject", "message", "created_at")
     actions = [mark_read, mark_in_progress, mark_resolved, archive_contacts, export_contacts_csv]
+
+    def changelist_view(self, request, extra_context=None):
+        extra_context = extra_context or {}
+        extra_context["pending_count"] = Contact.objects.filter(status=ContactStatus.PENDING).count()
+        extra_context["in_progress_count"] = Contact.objects.filter(status=ContactStatus.IN_PROGRESS).count()
+        extra_context["resolved_count"] = Contact.objects.filter(status=ContactStatus.RESOLVED).count()
+        extra_context["current_status"] = request.GET.get("status", "")
+        return super().changelist_view(request, extra_context)
 
     @admin.display(description="Assigné à")
     def assigned_to_display(self, obj):

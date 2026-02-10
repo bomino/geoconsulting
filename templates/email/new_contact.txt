@@ -1,0 +1,13 @@
+Nouveau message de contact
+==========================
+
+Nom: {{ contact.name }}
+Email: {{ contact.email }}
+Telephone: {{ contact.phone|default:"-" }}
+Sujet: {{ contact.subject|default:"-" }}
+
+Message:
+{{ contact.message }}
+
+---
+Ce message a ete envoye depuis le formulaire de contact de GeoConsulting.

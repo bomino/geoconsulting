@@ -93,6 +93,8 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
+DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="info@mygeoconsulting.com")
+
 LANGUAGE_CODE = "fr-fr"
 TIME_ZONE = "Africa/Niamey"
 USE_I18N = True

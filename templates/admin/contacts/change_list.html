@@ -1,0 +1,20 @@
+{% extends "unfold/layouts/change_list.html" %}
+
+{% block content %}
+<div class="mb-6 flex border-b border-gray-200">
+  <a href="?status=Pending"
+     class="px-4 py-3 text-sm font-medium transition {% if current_status == 'Pending' %}border-b-2 border-primary-700 text-primary-700{% else %}text-gray-500 hover:text-gray-700{% endif %}">
+    En attente ({{ pending_count }})
+  </a>
+  <a href="?status=In+Progress"
+     class="px-4 py-3 text-sm font-medium transition {% if current_status == 'In Progress' %}border-b-2 border-primary-700 text-primary-700{% else %}text-gray-500 hover:text-gray-700{% endif %}">
+    En cours ({{ in_progress_count }})
+  </a>
+  <a href="?status=Resolved"
+     class="px-4 py-3 text-sm font-medium transition {% if current_status == 'Resolved' %}border-b-2 border-primary-700 text-primary-700{% else %}text-gray-500 hover:text-gray-700{% endif %}">
+    Résolus ({{ resolved_count }})
+  </a>
+</div>
+
+{{ block.super }}
+{% endblock %}

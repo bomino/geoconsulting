@@ -1,0 +1,79 @@
+{% if not query %}
+<p class="py-8 text-center text-gray-500">Entrez un terme de recherche.</p>
+
+{% elif not projects and not articles and not services %}
+<p class="py-8 text-center text-gray-500">Aucun résultat pour « {{ query }} ».</p>
+
+{% else %}
+<div class="space-y-10">
+  {% if projects %}
+  <div>
+    <h2 class="mb-4 text-xl font-bold text-primary-700">Projets</h2>
+    <ul class="space-y-3">
+      {% for project in projects %}
+      <li class="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+        <a href="{% url 'project_detail' project.slug %}" class="group flex items-center justify-between">
+          <div>
+            <span class="mr-2 rounded-full bg-secondary-50 px-2 py-0.5 text-xs font-medium text-secondary-700">
+              {{ project.get_category_display }}
+            </span>
+            <span class="font-medium text-gray-900 group-hover:text-primary-700 group-hover:underline">
+              {{ project.title }}
+            </span>
+          </div>
+          <svg class="h-4 w-4 flex-shrink-0 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+          </svg>
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+
+  {% if articles %}
+  <div>
+    <h2 class="mb-4 text-xl font-bold text-primary-700">Actualités</h2>
+    <ul class="space-y-3">
+      {% for article in articles %}
+      <li class="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+        <a href="{% url 'article_detail' article.slug %}" class="group flex items-center justify-between">
+          <div>
+            {% if article.published_at %}
+            <span class="mr-2 text-xs text-gray-400">{{ article.published_at|date:"d M Y" }}</span>
+            {% endif %}
+            <span class="font-medium text-gray-900 group-hover:text-primary-700 group-hover:underline">
+              {{ article.title }}
+            </span>
+          </div>
+          <svg class="h-4 w-4 flex-shrink-0 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+          </svg>
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+
+  {% if services %}
+  <div>
+    <h2 class="mb-4 text-xl font-bold text-primary-700">Services</h2>
+    <ul class="space-y-3">
+      {% for service in services %}
+      <li class="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+        <a href="/services/{{ service.slug }}/" class="group flex items-center justify-between">
+          <span class="font-medium text-gray-900 group-hover:text-primary-700 group-hover:underline">
+            {{ service.name }}
+          </span>
+          <svg class="h-4 w-4 flex-shrink-0 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+          </svg>
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+</div>
+{% endif %}

@@ -1,7 +1,8 @@
 from collections import OrderedDict
 
+from django.contrib.postgres.search import SearchQuery, SearchRank
 from django.http import Http404
-from django.views.generic import TemplateView
+from django.views.generic import ListView, TemplateView
 
 from apps.articles.models import Article
 from apps.core.models import FAQ, FAQCategory, SiteSetting
@@ -114,3 +115,48 @@ class FAQView(TemplateView):
             grouped.setdefault(label, []).append(faq)
         context["faq_groups"] = grouped
         return context
+
+
+class SearchView(ListView):
+    template_name = "pages/search.html"
+    context_object_name = "results"
+
+    def get_queryset(self):
+        return []
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        query = self.request.GET.get("q", "").strip()[:200]
+        context["query"] = query
+
+        if query:
+            search_query = SearchQuery(query, config="french")
+
+            projects = (
+                Project.objects.filter(published=True, search_vector=search_query)
+                .annotate(rank=SearchRank("search_vector", search_query))
+                .order_by("-rank")[:5]
+            )
+            articles = (
+                Article.objects.filter(published=True, search_vector=search_query)
+                .annotate(rank=SearchRank("search_vector", search_query))
+                .order_by("-rank")[:5]
+            )
+
+            query_lower = query.lower()
+            matched_services = [
+                s for s in SERVICES
+                if query_lower in s["name"].lower()
+                or any(query_lower in item.lower() for item in s["items"])
+            ]
+
+            context["projects"] = projects
+            context["articles"] = articles
+            context["services"] = matched_services
+
+        return context
+
+    def get_template_names(self):
+        if self.request.headers.get("HX-Request") == "true":
+            return ["partials/_search_results.html"]
+        return [self.template_name]

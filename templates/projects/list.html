@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}Nos Projets — GeoConsulting SARLU{% endblock %}
+
+{% block content %}
+{# -- Hero -- #}
+<section class="bg-primary-700 py-16 text-white">
+  <div class="mx-auto max-w-4xl px-4 text-center">
+    <h1 class="mb-4 text-4xl font-bold">Nos Projets</h1>
+    <p class="text-lg text-primary-200">Retrouvez l'ensemble de nos réalisations à travers le Niger</p>
+  </div>
+</section>
+
+{# -- Category Filters + Grid -- #}
+<section class="py-16">
+  <div class="mx-auto max-w-7xl px-4 lg:px-8"
+       x-data="{ active: '{{ current_category|default:'' }}' }">
+
+    {# Filter buttons #}
+    <div class="mb-10 flex flex-wrap justify-center gap-3">
+      <button @click="active = ''"
+              :class="active === '' ? 'bg-primary-700 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'"
+              class="rounded-full px-5 py-2 text-sm font-medium transition"
+              hx-get="/projets/"
+              hx-target="#project-grid"
+              hx-swap="innerHTML">
+        Tous
+      </button>
+      <button @click="active = 'Routes'"
+              :class="active === 'Routes' ? 'bg-primary-700 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'"
+              class="rounded-full px-5 py-2 text-sm font-medium transition"
+              hx-get="/projets/?category=Routes"
+              hx-target="#project-grid"
+              hx-swap="innerHTML">
+        Routes et voiries
+      </button>
+      <button @click="active = 'Bâtiments'"
+              :class="active === 'Bâtiments' ? 'bg-primary-700 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'"
+              class="rounded-full px-5 py-2 text-sm font-medium transition"
+              hx-get="/projets/?category=B%C3%A2timents"
+              hx-target="#project-grid"
+              hx-swap="innerHTML">
+        Bâtiments et structures
+      </button>
+      <button @click="active = 'Hydraulique'"
+              :class="active === 'Hydraulique' ? 'bg-primary-700 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'"
+              class="rounded-full px-5 py-2 text-sm font-medium transition"
+              hx-get="/projets/?category=Hydraulique"
+              hx-target="#project-grid"
+              hx-swap="innerHTML">
+        Hydraulique et assainissement
+      </button>
+      <button @click="active = 'Aménagement'"
+              :class="active === 'Aménagement' ? 'bg-primary-700 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'"
+              class="rounded-full px-5 py-2 text-sm font-medium transition"
+              hx-get="/projets/?category=Am%C3%A9nagement"
+              hx-target="#project-grid"
+              hx-swap="innerHTML">
+        Aménagements urbains
+      </button>
+      <button @click="active = 'Études'"
+              :class="active === 'Études' ? 'bg-primary-700 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'"
+              class="rounded-full px-5 py-2 text-sm font-medium transition"
+              hx-get="/projets/?category=%C3%89tudes"
+              hx-target="#project-grid"
+              hx-swap="innerHTML">
+        Études techniques
+      </button>
+    </div>
+
+    {# Project grid (swapped by HTMX) #}
+    <div id="project-grid">
+      {% include "projects/_grid.html" %}
+    </div>
+  </div>
+</section>
+
+{# -- CTA -- #}
+<section class="bg-gray-50 py-16">
+  <div class="mx-auto max-w-3xl px-4 text-center">
+    <h2 class="mb-4 text-2xl font-bold text-primary-700">Vous avez un projet ?</h2>
+    <p class="mb-6 text-gray-600">Contactez-nous pour discuter de vos besoins et obtenir un devis personnalisé.</p>
+    <a href="/contact/" class="inline-block rounded bg-secondary-700 px-6 py-2.5 text-sm font-medium text-white hover:bg-secondary-600">
+      Nous contacter
+    </a>
+  </div>
+</section>
+{% endblock %}
