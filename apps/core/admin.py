@@ -26,12 +26,12 @@ class SiteSettingAdmin(ModelAdmin):
 
 @admin.register(TeamMember)
 class TeamMemberAdmin(ModelAdmin):
-    list_display = ("full_name_display", "role", "department", "order", "published")
-    list_filter = ("department", "published")
+    list_display = ("full_name_display", "role", "department", "division", "order", "published")
+    list_filter = ("department", "division", "published")
     search_fields = ("first_name", "last_name", "role")
     list_editable = ("order", "published")
     fieldsets = (
-        (None, {"fields": ("first_name", "last_name", "role", "department", "photo")}),
+        (None, {"fields": ("first_name", "last_name", "role", "department", "division", "photo")}),
         ("Contact", {"fields": ("email", "phone")}),
         ("Bio", {"fields": ("bio",)}),
         ("Affichage", {"fields": ("order", "published")}),

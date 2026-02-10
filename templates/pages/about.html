@@ -93,10 +93,11 @@
 
 {# ── Organigramme ── #}
 <section id="organigramme" class="scroll-mt-32 py-20">
-  <div class="mx-auto max-w-6xl px-4 lg:px-8" x-data x-intersect.once="$el.classList.add('animate-fade-up')">
+  <div class="mx-auto max-w-7xl px-4 lg:px-8" x-data x-intersect.once="$el.classList.add('animate-fade-up')">
     <h2 class="section-divider mb-10 text-3xl font-bold text-primary-800">Organigramme</h2>
-    {% if direction or departments %}
+    {% if direction or org_chart %}
 
+      {# Direction Générale #}
       {% if direction %}
       <div class="flex flex-col items-center">
         {% for member in direction %}
@@ -116,38 +117,89 @@
       </div>
       {% endif %}
 
-      {% if departments %}
+      {# Departments grid #}
+      {% if org_chart %}
       <div class="flex justify-center">
         <div class="h-10 w-0.5 bg-primary-300"></div>
       </div>
 
       <div class="relative">
-        <div class="absolute left-1/2 top-0 hidden h-0.5 -translate-x-1/2 bg-primary-300 lg:block" style="width: calc(100% - 100% / {{ departments|length }})"></div>
+        <div class="absolute left-1/2 top-0 hidden h-0.5 -translate-x-1/2 bg-primary-300 lg:block" style="width: calc(100% - 100% / {{ org_chart|length }})"></div>
 
-        <div class="grid gap-8 lg:grid-cols-{{ departments|length }}">
-          {% for dept_label, members in departments.items %}
+        <div class="grid gap-6 lg:grid-cols-4">
+          {% for dept in org_chart %}
           <div class="flex flex-col items-center">
             <div class="hidden h-8 w-0.5 bg-primary-300 lg:block"></div>
 
-            <div class="mb-4 w-full rounded-xl bg-primary-700 px-4 py-2.5 text-center">
-              <h3 class="text-sm font-semibold tracking-wide text-white">{{ dept_label }}</h3>
+            {# Department header #}
+            <div class="mb-4 w-full rounded-xl bg-primary-700 px-3 py-3 text-center">
+              <p class="text-xs font-medium uppercase tracking-wider text-primary-200">Département {{ forloop.counter }}</p>
+              <h3 class="mt-0.5 text-sm font-semibold leading-tight text-white">{{ dept.label }}</h3>
             </div>
 
-            <div class="w-full space-y-3">
-              {% for member in members %}
-              <div class="flex items-center gap-3 rounded-xl border border-gray-100 bg-white p-3.5 shadow-sm transition hover:shadow-md">
-                {% if member.photo %}
-                  <img src="{{ member.photo.url }}" alt="{{ member.full_name }}" class="h-11 w-11 shrink-0 rounded-full object-cover">
-                {% else %}
-                  <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary-100 text-xs font-bold text-primary-700">{{ member.initials }}</div>
-                {% endif %}
-                <div class="min-w-0">
-                  <p class="truncate text-sm font-semibold text-gray-900">{{ member.full_name }}</p>
-                  <p class="truncate text-xs text-gray-500">{{ member.role }}</p>
+            {% if dept.divisions %}
+              {# Departments with sub-divisions #}
+              <div class="w-full space-y-3">
+                {% for division in dept.divisions %}
+                <div class="rounded-lg border border-primary-100 bg-primary-50/50 p-3">
+                  <p class="mb-2 text-center text-xs font-semibold uppercase tracking-wide text-primary-700">{{ division.label }}</p>
+                  {% if division.members %}
+                  <div class="space-y-2">
+                    {% for member in division.members %}
+                    <div class="flex items-center gap-2.5 rounded-lg border border-gray-100 bg-white p-2.5 shadow-sm transition hover:shadow-md">
+                      {% if member.photo %}
+                        <img src="{{ member.photo.url }}" alt="{{ member.full_name }}" class="h-9 w-9 shrink-0 rounded-full object-cover">
+                      {% else %}
+                        <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary-100 text-xs font-bold text-primary-700">{{ member.initials }}</div>
+                      {% endif %}
+                      <div class="min-w-0">
+                        <p class="truncate text-xs font-semibold text-gray-900">{{ member.full_name }}</p>
+                        <p class="truncate text-xs text-gray-500">{{ member.role }}</p>
+                      </div>
+                    </div>
+                    {% endfor %}
+                  </div>
+                  {% endif %}
                 </div>
+                {% endfor %}
               </div>
-              {% endfor %}
-            </div>
+              {% if dept.members %}
+              <div class="mt-3 w-full space-y-2">
+                {% for member in dept.members %}
+                <div class="flex items-center gap-2.5 rounded-lg border border-gray-100 bg-white p-2.5 shadow-sm transition hover:shadow-md">
+                  {% if member.photo %}
+                    <img src="{{ member.photo.url }}" alt="{{ member.full_name }}" class="h-9 w-9 shrink-0 rounded-full object-cover">
+                  {% else %}
+                    <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary-100 text-xs font-bold text-primary-700">{{ member.initials }}</div>
+                  {% endif %}
+                  <div class="min-w-0">
+                    <p class="truncate text-xs font-semibold text-gray-900">{{ member.full_name }}</p>
+                    <p class="truncate text-xs text-gray-500">{{ member.role }}</p>
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+              {% endif %}
+            {% else %}
+              {# Departments without divisions #}
+              {% if dept.members %}
+              <div class="w-full space-y-2">
+                {% for member in dept.members %}
+                <div class="flex items-center gap-2.5 rounded-lg border border-gray-100 bg-white p-2.5 shadow-sm transition hover:shadow-md">
+                  {% if member.photo %}
+                    <img src="{{ member.photo.url }}" alt="{{ member.full_name }}" class="h-9 w-9 shrink-0 rounded-full object-cover">
+                  {% else %}
+                    <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary-100 text-xs font-bold text-primary-700">{{ member.initials }}</div>
+                  {% endif %}
+                  <div class="min-w-0">
+                    <p class="truncate text-xs font-semibold text-gray-900">{{ member.full_name }}</p>
+                    <p class="truncate text-xs text-gray-500">{{ member.role }}</p>
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+              {% endif %}
+            {% endif %}
           </div>
           {% endfor %}
         </div>
@@ -175,9 +227,9 @@
 <section id="politique-qualite" class="scroll-mt-32 bg-gray-50/50 py-20">
   <div class="mx-auto max-w-4xl px-4 lg:px-8" x-data x-intersect.once="$el.classList.add('animate-fade-up')">
     <h2 class="section-divider mb-8 text-3xl font-bold text-primary-800">Politique Qualité</h2>
-    {% if politique_qualite_image and politique_qualite_image.image %}
+    {% if politique_qualite and politique_qualite.image %}
     <div class="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
-      <img src="{{ politique_qualite_image.image.url }}" alt="Politique Qualité de GéoConsulting"
+      <img src="{{ politique_qualite.image.url }}" alt="Politique Qualité de GéoConsulting"
            class="w-full object-contain">
     </div>
     {% else %}

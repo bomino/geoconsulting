@@ -54,7 +54,10 @@ class TestAboutView:
         TeamMemberFactory(department=Department.LABORATOIRE)
         response = self.client.get("/a-propos/")
         assert len(response.context["direction"]) == 1
-        assert len(response.context["departments"]) >= 2
+        org_chart = response.context["org_chart"]
+        assert len(org_chart) == 4
+        dept_labels = [d["label"] for d in org_chart]
+        assert "Laboratoire" in dept_labels
 
 
 @pytest.mark.django_db

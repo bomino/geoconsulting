@@ -12,7 +12,7 @@ from django.utils.text import slugify
 
 from apps.accounts.models import User
 from apps.articles.models import Article
-from apps.core.enums import Department
+from apps.core.enums import Department, Division
 from apps.core.models import FAQ, FAQCategory, SiteSetting, TeamMember
 from apps.projects.models import Project
 
@@ -455,6 +455,7 @@ TEAM_MEMBERS = [
         "last_name": "Souley",
         "role": "Chef de Laboratoire",
         "department": Department.LABORATOIRE,
+        "division": Division.GEOTECHNIQUE,
         "order": 1,
     },
     {
@@ -462,6 +463,7 @@ TEAM_MEMBERS = [
         "last_name": "Garba",
         "role": "Technicien Essais",
         "department": Department.LABORATOIRE,
+        "division": Division.BETON,
         "order": 2,
     },
     {
@@ -469,6 +471,7 @@ TEAM_MEMBERS = [
         "last_name": "Ousmane",
         "role": "Responsable Administrative",
         "department": Department.ADMIN,
+        "division": Division.RH_COMM,
         "order": 1,
     },
     {
@@ -476,6 +479,7 @@ TEAM_MEMBERS = [
         "last_name": "Adamou",
         "role": "Comptable",
         "department": Department.ADMIN,
+        "division": Division.COMPTABLE,
         "order": 2,
     },
 ]

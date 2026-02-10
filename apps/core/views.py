@@ -5,7 +5,7 @@ from django.http import Http404
 from django.views.generic import ListView, TemplateView
 
 from apps.articles.models import Article
-from apps.core.enums import Department
+from apps.core.enums import Department, Division
 from apps.core.models import FAQ, FAQCategory, SiteSetting, TeamMember
 from apps.projects.models import Project
 
@@ -52,6 +52,13 @@ SERVICES = [
 
 SERVICES_BY_SLUG = {s["slug"]: s for s in SERVICES}
 
+ORG_STRUCTURE = [
+    {"dept": Department.RECHERCHE, "divisions": []},
+    {"dept": Department.ADMIN, "divisions": [Division.RH_COMM, Division.COMPTABLE]},
+    {"dept": Department.ETUDES, "divisions": []},
+    {"dept": Department.LABORATOIRE, "divisions": [Division.BETON, Division.ENVIRONNEMENT, Division.GEOTECHNIQUE]},
+]
+
 
 class HomeView(TemplateView):
     template_name = "pages/home.html"
@@ -77,15 +84,30 @@ class AboutView(TemplateView):
         context["organigramme"] = site_settings.get("organigramme_image")
         context["politique_qualite"] = site_settings.get("politique_qualite_image")
 
-        team_members = TeamMember.objects.filter(published=True)
+        team_members = list(TeamMember.objects.filter(published=True))
         context["direction"] = [m for m in team_members if m.department == Department.DIRECTION]
-        departments = OrderedDict()
-        for member in team_members:
-            if member.department == Department.DIRECTION:
-                continue
-            label = Department(member.department).label
-            departments.setdefault(label, []).append(member)
-        context["departments"] = departments
+
+        org_chart = []
+        for entry in ORG_STRUCTURE:
+            dept = entry["dept"]
+            dept_members = [m for m in team_members if m.department == dept.value]
+
+            if entry["divisions"]:
+                divisions_data = []
+                for div in entry["divisions"]:
+                    div_members = [m for m in dept_members if m.division == div.value]
+                    divisions_data.append({"label": div.label, "members": div_members})
+                unassigned = [m for m in dept_members if not m.division]
+            else:
+                divisions_data = []
+                unassigned = dept_members
+
+            org_chart.append({
+                "label": dept.label,
+                "divisions": divisions_data,
+                "members": unassigned,
+            })
+        context["org_chart"] = org_chart
 
         return context
 

@@ -6,7 +6,7 @@ from django.db import models
 from django.utils import timezone
 from PIL import Image
 
-from apps.core.enums import Department
+from apps.core.enums import Department, Division
 from apps.core.validators import validate_image_file
 
 TEAM_PHOTO_MAX_SIZE = 100
@@ -98,6 +98,7 @@ class TeamMember(TimestampMixin):
     last_name = models.CharField(max_length=100)
     role = models.CharField(max_length=150)
     department = models.CharField(max_length=20, choices=Department.choices)
+    division = models.CharField(max_length=20, choices=Division.choices, blank=True)
     photo = models.ImageField(upload_to="team/", blank=True, validators=[validate_image_file])
     bio = models.TextField(blank=True)
     email = models.EmailField(blank=True)
@@ -106,7 +107,7 @@ class TeamMember(TimestampMixin):
     published = models.BooleanField(default=True)
 
     class Meta:
-        ordering = ["department", "order", "last_name"]
+        ordering = ["department", "division", "order", "last_name"]
         verbose_name = "Membre de l'équipe"
         verbose_name_plural = "Membres de l'équipe"
 
