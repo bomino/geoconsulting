@@ -94,6 +94,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="info@mygeoconsulting.com")
+OPENAI_API_KEY = env("OPENAI_API_KEY", default="")
 
 LANGUAGE_CODE = "fr-fr"
 TIME_ZONE = "Africa/Niamey"

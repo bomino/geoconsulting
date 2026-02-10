@@ -1,0 +1,103 @@
+{% extends "base_portal.html" %}
+
+{% block title %}{{ project.title }} — GeoConsulting SARLU{% endblock %}
+
+{% block portal_content %}
+{# ── Breadcrumbs ── #}
+<nav class="mb-6 text-sm text-gray-500">
+  <a href="{% url 'portal_dashboard' %}" class="hover:text-primary-700">Tableau de bord</a>
+  <span class="mx-2">/</span>
+  <span class="text-gray-900">{{ project.title }}</span>
+</nav>
+
+{# ── Project Info ── #}
+<div class="mb-8 rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+  <h1 class="mb-4 text-xl font-bold text-gray-900">{{ project.title }}</h1>
+
+  <dl class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <div>
+      <dt class="text-xs font-medium uppercase tracking-wider text-gray-500">Catégorie</dt>
+      <dd class="mt-1 text-sm font-semibold text-gray-900">{{ project.get_category_display }}</dd>
+    </div>
+    <div>
+      <dt class="text-xs font-medium uppercase tracking-wider text-gray-500">Statut</dt>
+      <dd class="mt-1">
+        <span class="inline-block rounded px-2 py-0.5 text-xs font-medium
+          {% if project.status == 'completed' %}bg-green-100 text-green-700
+          {% elif project.status == 'in_progress' %}bg-yellow-100 text-yellow-700
+          {% else %}bg-gray-100 text-gray-600
+          {% endif %}">
+          {{ project.get_status_display|default:project.status }}
+        </span>
+      </dd>
+    </div>
+    {% if project.location %}
+    <div>
+      <dt class="text-xs font-medium uppercase tracking-wider text-gray-500">Localisation</dt>
+      <dd class="mt-1 text-sm text-gray-900">{{ project.location }}</dd>
+    </div>
+    {% endif %}
+    {% if project.client_name %}
+    <div>
+      <dt class="text-xs font-medium uppercase tracking-wider text-gray-500">Client</dt>
+      <dd class="mt-1 text-sm text-gray-900">{{ project.client_name }}</dd>
+    </div>
+    {% endif %}
+    {% if project.year %}
+    <div>
+      <dt class="text-xs font-medium uppercase tracking-wider text-gray-500">Année</dt>
+      <dd class="mt-1 text-sm text-gray-900">{{ project.year }}</dd>
+    </div>
+    {% endif %}
+  </dl>
+</div>
+
+{# ── Documents ── #}
+<div class="rounded-xl border border-gray-200 bg-white shadow-sm">
+  <div class="border-b border-gray-200 px-6 py-4">
+    <h2 class="text-lg font-semibold text-gray-900">Documents</h2>
+  </div>
+
+  {% if documents %}
+    <div class="overflow-x-auto">
+      <table class="w-full text-left text-sm">
+        <thead class="border-b border-gray-200 bg-gray-50 text-xs font-medium uppercase tracking-wider text-gray-500">
+          <tr>
+            <th class="px-6 py-3">Titre</th>
+            <th class="px-6 py-3">Catégorie</th>
+            <th class="px-6 py-3">Taille</th>
+            <th class="px-6 py-3">Date</th>
+            <th class="px-6 py-3"></th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          {% for doc in documents %}
+            <tr class="hover:bg-gray-50 transition">
+              <td class="px-6 py-4 font-medium text-gray-900">{{ doc.title }}</td>
+              <td class="px-6 py-4 text-gray-600">{{ doc.get_category_display|default:doc.category }}</td>
+              <td class="px-6 py-4 text-gray-500">{{ doc.size_display }}</td>
+              <td class="px-6 py-4 text-gray-500">{{ doc.created_at|date:"d/m/Y" }}</td>
+              <td class="px-6 py-4 text-right">
+                <a href="{% url 'portal_document_download' slug=project.slug doc_id=doc.id %}"
+                   class="inline-flex items-center gap-1.5 rounded-lg bg-primary-700 px-3 py-1.5 text-xs font-medium text-white transition hover:bg-primary-800">
+                  <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/>
+                  </svg>
+                  Télécharger
+                </a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="px-6 py-12 text-center">
+      <svg class="mx-auto h-10 w-10 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/>
+      </svg>
+      <p class="mt-3 text-sm text-gray-500">Aucun document disponible</p>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

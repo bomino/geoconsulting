@@ -1,0 +1,13 @@
+Nouveau document disponible
+============================
+
+Un nouveau document a été ajouté au projet : {{ document.project.title }}
+
+Document: {{ document.title }}
+Catégorie: {{ document.get_category_display|default:document.category }}
+Date: {{ document.created_at|date:"d/m/Y" }}
+
+Voir le projet: {{ project_url }}
+
+---
+Ce message a ete envoye automatiquement par GeoConsulting.

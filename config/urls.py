@@ -13,6 +13,8 @@ urlpatterns = [
     path("actualites/", include("apps.articles.urls")),
     path("", include("apps.core.urls")),
     path("contact/", include("apps.contacts.urls")),
+    path("portail/", include("apps.portal.urls")),
+    path("api/", include("apps.chatbot.urls")),
 ]
 
 if settings.DEBUG:

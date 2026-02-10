@@ -2,7 +2,7 @@ from datetime import datetime
 
 
 def company_info(request):
-    return {
+    ctx = {
         "company_name": "GéoConsulting SARLU",
         "company_slogan": "La qualité au service du développement durable",
         "company_address": "Tchangarey, Niamey, Niger",
@@ -16,3 +16,10 @@ def company_info(request):
         "company_map_lng": "2.105278",
         "current_year": datetime.now().year,
     }
+    if hasattr(request, "user") and request.user.is_authenticated:
+        from apps.portal.models import Message
+
+        ctx["unread_count"] = Message.objects.filter(
+            to_user=request.user, read=False
+        ).count()
+    return ctx

@@ -1,0 +1,13 @@
+Nouveau projet assigné
+======================
+
+Vous avez été assigné(e) au projet : {{ client_project.project.title }}
+
+Catégorie: {{ client_project.project.get_category_display }}
+Statut: {{ client_project.project.get_status_display|default:client_project.project.status }}
+{% if client_project.project.location %}Localisation: {{ client_project.project.location }}{% endif %}
+
+Accéder au portail: {{ portal_url }}
+
+---
+Ce message a ete envoye automatiquement par GeoConsulting.
