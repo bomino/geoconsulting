@@ -1,3 +1,1 @@
-from django.db import models
-
-# Create your models here.
+# Chatbot is API-only — no database models needed.

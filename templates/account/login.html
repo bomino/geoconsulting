@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load allauth %}
+
+{% block title %}Connexion — GeoConsulting{% endblock %}
+
+{% block content %}
+<div class="mx-auto max-w-md px-4 py-16">
+  <h1 class="mb-8 text-2xl font-bold text-primary-700">Connexion</h1>
+
+  {% if form.errors %}
+  <div class="mb-4 rounded bg-red-50 p-4 text-sm text-red-700">
+    Identifiants incorrects. Veuillez réessayer.
+  </div>
+  {% endif %}
+
+  <form method="post" action="{% url 'account_login' %}">
+    {% csrf_token %}
+    {% for field in form %}
+    <div class="mb-4">
+      <label for="{{ field.id_for_label }}" class="mb-1 block text-sm font-medium text-gray-700">
+        {{ field.label }}
+      </label>
+      {{ field }}
+    </div>
+    {% endfor %}
+    {% if redirect_field_value %}
+    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}">
+    {% endif %}
+    <button type="submit" class="w-full rounded bg-primary-700 px-4 py-2 text-white hover:bg-primary-800">
+      Se connecter
+    </button>
+  </form>
+
+  <p class="mt-6 text-center text-sm text-gray-600">
+    <a href="{% url 'account_reset_password' %}" class="text-primary-700 hover:underline">Mot de passe oublié ?</a>
+  </p>
+  <p class="mt-2 text-center text-sm text-gray-600">
+    Pas encore de compte ?
+    <a href="{% url 'account_signup' %}" class="text-primary-700 hover:underline">Créer un compte</a>
+  </p>
+</div>
+{% endblock %}
