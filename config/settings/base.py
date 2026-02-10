@@ -212,6 +212,11 @@ UNFOLD = {
                         "icon": "settings",
                         "link": reverse_lazy("admin:core_sitesetting_changelist"),
                     },
+                    {
+                        "title": _("Guide d'administration"),
+                        "icon": "menu_book",
+                        "link": lambda request: "/admin/guide/",
+                    },
                 ],
             },
             {

@@ -4,9 +4,11 @@ from django.contrib import admin
 from django.urls import include, path
 
 from apps.core.views import HomeView
+from apps.core.views_admin import admin_guide_view
 
 urlpatterns = [
     path("", HomeView.as_view(), name="home"),
+    path("admin/guide/", admin_guide_view, name="admin_guide"),
     path("admin/", admin.site.urls),
     path("comptes/", include("allauth.urls")),
     path("projets/", include("apps.projects.urls")),

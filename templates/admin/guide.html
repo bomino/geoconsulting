@@ -1,0 +1,509 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block title %}Guide d'administration — {{ site_title }}{% endblock %}
+
+{% block breadcrumbs %}
+<div class="flex items-center gap-2 px-6 py-3 text-sm text-gray-500 dark:text-gray-400">
+  <a href="{% url 'admin:index' %}" class="hover:text-primary-700">Accueil</a>
+  <span>/</span>
+  <span class="text-gray-800 dark:text-gray-200">Guide d'administration</span>
+</div>
+{% endblock %}
+
+{% block content %}
+<div x-data="{ activeSection: window.location.hash || '#vue-d-ensemble' }" class="flex gap-8 px-2">
+
+  {# Table of contents — sticky sidebar #}
+  <nav class="hidden lg:block w-56 shrink-0 sticky top-20 self-start max-h-[calc(100vh-6rem)] overflow-y-auto">
+    <p class="text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-3">Sommaire</p>
+    <ul class="space-y-1 text-sm">
+      <li><a href="#vue-d-ensemble" @click="activeSection = '#vue-d-ensemble'" class="block py-1 px-2 rounded transition" :class="activeSection === '#vue-d-ensemble' ? 'bg-primary-50 text-primary-700 font-medium dark:bg-primary-900/30 dark:text-primary-300' : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200'">1. Vue d'ensemble</a></li>
+      <li><a href="#utilisateurs" @click="activeSection = '#utilisateurs'" class="block py-1 px-2 rounded transition" :class="activeSection === '#utilisateurs' ? 'bg-primary-50 text-primary-700 font-medium dark:bg-primary-900/30 dark:text-primary-300' : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200'">2. Utilisateurs</a></li>
+      <li><a href="#projets" @click="activeSection = '#projets'" class="block py-1 px-2 rounded transition" :class="activeSection === '#projets' ? 'bg-primary-50 text-primary-700 font-medium dark:bg-primary-900/30 dark:text-primary-300' : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200'">3. Projets</a></li>
+      <li><a href="#articles" @click="activeSection = '#articles'" class="block py-1 px-2 rounded transition" :class="activeSection === '#articles' ? 'bg-primary-50 text-primary-700 font-medium dark:bg-primary-900/30 dark:text-primary-300' : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200'">4. Articles</a></li>
+      <li><a href="#faq" @click="activeSection = '#faq'" class="block py-1 px-2 rounded transition" :class="activeSection === '#faq' ? 'bg-primary-50 text-primary-700 font-medium dark:bg-primary-900/30 dark:text-primary-300' : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200'">5. FAQ</a></li>
+      <li><a href="#equipe" @click="activeSection = '#equipe'" class="block py-1 px-2 rounded transition" :class="activeSection === '#equipe' ? 'bg-primary-50 text-primary-700 font-medium dark:bg-primary-900/30 dark:text-primary-300' : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200'">6. Equipe</a></li>
+      <li><a href="#contacts-crm" @click="activeSection = '#contacts-crm'" class="block py-1 px-2 rounded transition" :class="activeSection === '#contacts-crm' ? 'bg-primary-50 text-primary-700 font-medium dark:bg-primary-900/30 dark:text-primary-300' : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200'">7. Contacts & CRM</a></li>
+      <li><a href="#portail-client" @click="activeSection = '#portail-client'" class="block py-1 px-2 rounded transition" :class="activeSection === '#portail-client' ? 'bg-primary-50 text-primary-700 font-medium dark:bg-primary-900/30 dark:text-primary-300' : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200'">8. Portail client</a></li>
+      <li><a href="#chatbot" @click="activeSection = '#chatbot'" class="block py-1 px-2 rounded transition" :class="activeSection === '#chatbot' ? 'bg-primary-50 text-primary-700 font-medium dark:bg-primary-900/30 dark:text-primary-300' : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200'">9. Chatbot IA</a></li>
+      <li><a href="#audit" @click="activeSection = '#audit'" class="block py-1 px-2 rounded transition" :class="activeSection === '#audit' ? 'bg-primary-50 text-primary-700 font-medium dark:bg-primary-900/30 dark:text-primary-300' : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200'">10. Journal d'audit</a></li>
+      <li><a href="#parametres" @click="activeSection = '#parametres'" class="block py-1 px-2 rounded transition" :class="activeSection === '#parametres' ? 'bg-primary-50 text-primary-700 font-medium dark:bg-primary-900/30 dark:text-primary-300' : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200'">11. Parametres</a></li>
+      <li><a href="#maintenance" @click="activeSection = '#maintenance'" class="block py-1 px-2 rounded transition" :class="activeSection === '#maintenance' ? 'bg-primary-50 text-primary-700 font-medium dark:bg-primary-900/30 dark:text-primary-300' : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200'">12. Maintenance</a></li>
+    </ul>
+  </nav>
+
+  {# Main content #}
+  <div class="flex-1 min-w-0 max-w-4xl space-y-10 pb-16">
+
+    {# Header #}
+    <div class="border-b border-gray-200 dark:border-gray-700 pb-6">
+      <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Guide d'administration</h1>
+      <p class="mt-2 text-gray-600 dark:text-gray-400">Documentation complete pour l'administration du site GeoConsulting SARLU.</p>
+    </div>
+
+    {# ==================== 1. VUE D'ENSEMBLE ==================== #}
+    <section id="vue-d-ensemble">
+      <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary-700">dashboard</span>
+        1. Vue d'ensemble
+      </h2>
+      <div class="prose dark:prose-invert max-w-none text-sm space-y-3">
+        <p>Le panneau d'administration est accessible a <code>/admin/</code>. Seuls les utilisateurs avec le statut <strong>staff</strong> peuvent y acceder.</p>
+        <p>La barre laterale est organisee en <strong>4 sections</strong> :</p>
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b border-gray-200 dark:border-gray-700">
+              <th class="text-left py-2 px-3 font-medium text-gray-700 dark:text-gray-300">Section</th>
+              <th class="text-left py-2 px-3 font-medium text-gray-700 dark:text-gray-300">Contenu</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-gray-100 dark:border-gray-800">
+              <td class="py-2 px-3 font-medium">Gestion du site</td>
+              <td class="py-2 px-3">Tableau de bord, utilisateurs, equipe, parametres, ce guide</td>
+            </tr>
+            <tr class="border-b border-gray-100 dark:border-gray-800">
+              <td class="py-2 px-3 font-medium">Contenu</td>
+              <td class="py-2 px-3">Projets, articles, FAQ</td>
+            </tr>
+            <tr class="border-b border-gray-100 dark:border-gray-800">
+              <td class="py-2 px-3 font-medium">Relations clients</td>
+              <td class="py-2 px-3">Contacts, portail client, modeles email, regles d'attribution</td>
+            </tr>
+            <tr>
+              <td class="py-2 px-3 font-medium">Systeme</td>
+              <td class="py-2 px-3">Journal d'audit</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    {# ==================== 2. UTILISATEURS ==================== #}
+    <section id="utilisateurs">
+      <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary-700">people</span>
+        2. Gestion des utilisateurs
+      </h2>
+      <div class="space-y-4 text-sm text-gray-700 dark:text-gray-300">
+        <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+          <p class="font-medium text-blue-800 dark:text-blue-300 mb-2">Trois roles disponibles</p>
+          <ul class="space-y-1 ml-4 list-disc text-blue-700 dark:text-blue-400">
+            <li><strong>Admin</strong> : is_staff=True + groupe "admins" — acces complet au panneau d'administration</li>
+            <li><strong>Client</strong> : groupe "clients" — acces au portail client uniquement</li>
+            <li><strong>Invite</strong> : aucun groupe — acces au site public uniquement</li>
+          </ul>
+        </div>
+
+        <h3 class="font-semibold text-gray-800 dark:text-gray-200">Creer un utilisateur</h3>
+        <p>Via <strong>Gestion du site &rarr; Utilisateurs &rarr; Ajouter</strong>. Renseigner email, nom, prenom et mot de passe. Le profil (telephone, avatar) est cree automatiquement.</p>
+
+        <h3 class="font-semibold text-gray-800 dark:text-gray-200">Changer le role</h3>
+        <p>Selectionner les utilisateurs dans la liste, puis utiliser les actions groupees :</p>
+        <ul class="ml-4 list-disc space-y-1">
+          <li><strong>Assigner le role client</strong> — ajoute au groupe "clients", retire de "admins"</li>
+          <li><strong>Assigner le role admin</strong> — ajoute au groupe "admins", active is_staff</li>
+          <li><strong>Assigner le role invite</strong> — retire de tous les groupes, desactive is_staff</li>
+        </ul>
+
+        <h3 class="font-semibold text-gray-800 dark:text-gray-200">Suppression douce</h3>
+        <p>Les utilisateurs ne sont <strong>jamais supprimes definitivement</strong>. L'action "Suppression douce" desactive le compte (is_active=False, is_deleted=True). Pour restaurer un utilisateur, utiliser l'action "Restaurer les utilisateurs selectionnes".</p>
+
+        <div class="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4">
+          <p class="font-medium text-amber-800 dark:text-amber-300">Note</p>
+          <p class="text-amber-700 dark:text-amber-400">La liste affiche tous les utilisateurs, y compris les supprimes (colonne "Supprime"). Filtrer par "Est supprime : Oui/Non" pour les retrouver.</p>
+        </div>
+      </div>
+    </section>
+
+    {# ==================== 3. PROJETS ==================== #}
+    <section id="projets">
+      <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary-700">construction</span>
+        3. Gestion des projets
+      </h2>
+      <div class="space-y-4 text-sm text-gray-700 dark:text-gray-300">
+        <p>Accessible via <strong>Contenu &rarr; Projets</strong>. Chaque projet represente une reference de chantier de GeoConsulting.</p>
+
+        <h3 class="font-semibold text-gray-800 dark:text-gray-200">Champs principaux</h3>
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b border-gray-200 dark:border-gray-700">
+              <th class="text-left py-2 px-3 font-medium text-gray-700 dark:text-gray-300">Champ</th>
+              <th class="text-left py-2 px-3 font-medium text-gray-700 dark:text-gray-300">Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-gray-100 dark:border-gray-800"><td class="py-2 px-3">Titre</td><td class="py-2 px-3">Nom du projet (max 255 caracteres)</td></tr>
+            <tr class="border-b border-gray-100 dark:border-gray-800"><td class="py-2 px-3">Slug</td><td class="py-2 px-3">Genere automatiquement a partir du titre (URL-friendly)</td></tr>
+            <tr class="border-b border-gray-100 dark:border-gray-800"><td class="py-2 px-3">Categorie</td><td class="py-2 px-3">Routes, Batiments, Hydraulique, Amenagement, Etudes</td></tr>
+            <tr class="border-b border-gray-100 dark:border-gray-800"><td class="py-2 px-3">Statut</td><td class="py-2 px-3">En cours, Termine, En attente</td></tr>
+            <tr class="border-b border-gray-100 dark:border-gray-800"><td class="py-2 px-3">Description</td><td class="py-2 px-3">Resume court du projet</td></tr>
+            <tr class="border-b border-gray-100 dark:border-gray-800"><td class="py-2 px-3">Contenu</td><td class="py-2 px-3">Description detaillee (supporte le format Markdown)</td></tr>
+            <tr class="border-b border-gray-100 dark:border-gray-800"><td class="py-2 px-3">Localisation</td><td class="py-2 px-3">Lieu du chantier</td></tr>
+            <tr class="border-b border-gray-100 dark:border-gray-800"><td class="py-2 px-3">Nom du client</td><td class="py-2 px-3">Maitre d'ouvrage</td></tr>
+            <tr class="border-b border-gray-100 dark:border-gray-800"><td class="py-2 px-3">Annee</td><td class="py-2 px-3">Annee de realisation</td></tr>
+            <tr class="border-b border-gray-100 dark:border-gray-800"><td class="py-2 px-3">Image</td><td class="py-2 px-3">Photo principale du projet</td></tr>
+            <tr><td class="py-2 px-3">Publie</td><td class="py-2 px-3">Visible sur le site public si coche</td></tr>
+          </tbody>
+        </table>
+
+        <h3 class="font-semibold text-gray-800 dark:text-gray-200">Publication</h3>
+        <p>Un projet non publie n'apparait pas sur le site public. Utiliser la case "Publie" ou les actions groupees "Publier / Depublier les projets selectionnes".</p>
+
+        <h3 class="font-semibold text-gray-800 dark:text-gray-200">Documents joints</h3>
+        <p>En bas du formulaire de projet, un onglet "Documents" permet d'ajouter des fichiers (PDF, DOCX, XLSX, max 50 Mo). Ces documents sont accessibles aux clients via le portail client.</p>
+
+        <div class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
+          <p class="font-medium text-green-800 dark:text-green-300">Cache automatique</p>
+          <p class="text-green-700 dark:text-green-400">La page publique des projets est mise en cache pendant 60 secondes. Apres avoir modifie un projet, le cache est automatiquement vide.</p>
+        </div>
+      </div>
+    </section>
+
+    {# ==================== 4. ARTICLES ==================== #}
+    <section id="articles">
+      <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary-700">article</span>
+        4. Gestion des articles
+      </h2>
+      <div class="space-y-4 text-sm text-gray-700 dark:text-gray-300">
+        <p>Accessible via <strong>Contenu &rarr; Articles</strong>. Les articles apparaissent sur la page <code>/actualites/</code>.</p>
+
+        <h3 class="font-semibold text-gray-800 dark:text-gray-200">Workflow de publication</h3>
+        <ol class="ml-4 list-decimal space-y-1">
+          <li>Creer l'article avec titre, extrait, contenu (Markdown), image et categorie</li>
+          <li>Le slug est genere automatiquement a partir du titre</li>
+          <li>Cocher "Publie" — la date de publication est automatiquement definie</li>
+          <li>Pour depublier, decocher "Publie" — la date de publication est effacee</li>
+        </ol>
+
+        <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+          <p class="font-medium text-blue-800 dark:text-blue-300">Markdown</p>
+          <p class="text-blue-700 dark:text-blue-400">Le champ "Contenu" supporte la syntaxe Markdown : <code>**gras**</code>, <code>*italique*</code>, <code># Titres</code>, listes, liens, etc. Le rendu est visible sur le site public.</p>
+        </div>
+      </div>
+    </section>
+
+    {# ==================== 5. FAQ ==================== #}
+    <section id="faq">
+      <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary-700">help</span>
+        5. FAQ
+      </h2>
+      <div class="space-y-4 text-sm text-gray-700 dark:text-gray-300">
+        <p>Accessible via <strong>Contenu &rarr; FAQ</strong>. Les FAQ sont affichees sur <code>/faq/</code>, groupees par categorie.</p>
+
+        <h3 class="font-semibold text-gray-800 dark:text-gray-200">Categories</h3>
+        <ul class="ml-4 list-disc space-y-1">
+          <li><strong>General</strong> — questions generales sur GeoConsulting</li>
+          <li><strong>Services</strong> — informations sur les prestations</li>
+          <li><strong>Projets</strong> — questions sur les references de chantier</li>
+          <li><strong>Clients</strong> — portail client, acces, suivi</li>
+          <li><strong>Contact</strong> — coordonnees, demandes de devis</li>
+        </ul>
+
+        <h3 class="font-semibold text-gray-800 dark:text-gray-200">Ordre d'affichage</h3>
+        <p>Le champ "Ordre" est editable directement dans la liste. Les FAQ sont triees par categorie puis par ordre croissant. La case "Publie" controle la visibilite sur le site public.</p>
+      </div>
+    </section>
+
+    {# ==================== 6. EQUIPE ==================== #}
+    <section id="equipe">
+      <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary-700">groups</span>
+        6. Equipe
+      </h2>
+      <div class="space-y-4 text-sm text-gray-700 dark:text-gray-300">
+        <p>Accessible via <strong>Gestion du site &rarr; Equipe</strong>. Les membres apparaissent dans l'organigramme sur <code>/a-propos/</code>.</p>
+
+        <h3 class="font-semibold text-gray-800 dark:text-gray-200">Departements</h3>
+        <ul class="ml-4 list-disc space-y-1">
+          <li><strong>Direction</strong> — Direction generale (affichee en haut de l'organigramme)</li>
+          <li><strong>Etudes</strong> — Bureau d'etudes techniques</li>
+          <li><strong>Laboratoire</strong> — Essais et controles</li>
+          <li><strong>Admin</strong> — Administration et comptabilite</li>
+        </ul>
+
+        <h3 class="font-semibold text-gray-800 dark:text-gray-200">Photo</h3>
+        <p>La photo est automatiquement redimensionnee a 100x100 pixels lors de l'enregistrement. Formats acceptes : JPEG, PNG.</p>
+
+        <h3 class="font-semibold text-gray-800 dark:text-gray-200">Ordre d'affichage</h3>
+        <p>Le champ "Ordre" est editable dans la liste. Les membres sont tries par departement, puis par ordre, puis par nom.</p>
+      </div>
+    </section>
+
+    {# ==================== 7. CONTACTS & CRM ==================== #}
+    <section id="contacts-crm">
+      <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary-700">mail</span>
+        7. Contacts & CRM
+      </h2>
+      <div class="space-y-4 text-sm text-gray-700 dark:text-gray-300">
+
+        <h3 class="font-semibold text-gray-800 dark:text-gray-200">Pipeline des contacts</h3>
+        <div class="flex items-center gap-2 text-xs font-medium my-3">
+          <span class="bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300 px-3 py-1.5 rounded-full">1. En attente</span>
+          <span class="text-gray-400">&rarr;</span>
+          <span class="bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300 px-3 py-1.5 rounded-full">2. En cours</span>
+          <span class="text-gray-400">&rarr;</span>
+          <span class="bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300 px-3 py-1.5 rounded-full">3. Resolu</span>
+        </div>
+        <ol class="ml-4 list-decimal space-y-1">
+          <li>Un visiteur remplit le formulaire sur <code>/contact/</code></li>
+          <li>Le contact est cree avec le statut "En attente"</li>
+          <li>Les regles d'attribution automatique s'appliquent (si configurees)</li>
+          <li>Tous les administrateurs recoivent un email de notification</li>
+          <li>Gerer le contact via les actions groupees ou en modifiant le statut individuellement</li>
+        </ol>
+
+        <h3 class="font-semibold text-gray-800 dark:text-gray-200">Onglets de la liste</h3>
+        <p>En haut de la liste des contacts, trois onglets indiquent le nombre de contacts par statut : En attente, En cours, Resolus.</p>
+
+        <h3 class="font-semibold text-gray-800 dark:text-gray-200">Actions groupees</h3>
+        <ul class="ml-4 list-disc space-y-1">
+          <li><strong>Marquer comme lu</strong></li>
+          <li><strong>Marquer en cours</strong></li>
+          <li><strong>Marquer resolu</strong></li>
+          <li><strong>Archiver</strong></li>
+          <li><strong>Exporter en CSV</strong> — telecharge un fichier CSV avec nom, email, telephone, sujet, message, statut et date</li>
+        </ul>
+
+        <h3 class="font-semibold text-gray-800 dark:text-gray-200">Regles d'attribution automatique</h3>
+        <p>Accessible via <strong>Relations clients &rarr; Regles d'attribution</strong>.</p>
+        <p>Chaque regle contient :</p>
+        <ul class="ml-4 list-disc space-y-1">
+          <li><strong>Mots-cles</strong> — liste de termes a rechercher dans le sujet et le message du contact</li>
+          <li><strong>Utilisateur assigne</strong> — le membre du staff qui recevra le contact</li>
+          <li><strong>Priorite</strong> — les regles de priorite superieure sont evaluees en premier</li>
+          <li><strong>Active</strong> — seules les regles actives sont prises en compte</li>
+        </ul>
+        <div class="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 mt-2">
+          <p class="font-medium text-gray-700 dark:text-gray-300 mb-1">Exemple</p>
+          <p class="text-gray-600 dark:text-gray-400">Regle : mots-cles = ["route", "chaussee"], utilisateur = Moussa, priorite = 10</p>
+          <p class="text-gray-600 dark:text-gray-400">Un contact avec le sujet "Etude de route nationale" sera automatiquement attribue a Moussa.</p>
+        </div>
+
+        <h3 class="font-semibold text-gray-800 dark:text-gray-200">Modeles email</h3>
+        <p>Accessible via <strong>Relations clients &rarr; Modeles email</strong>. Creer des modeles reutilisables pour les communications clients (devis, renseignements, informations generales).</p>
+
+        <h3 class="font-semibold text-gray-800 dark:text-gray-200">Protection anti-spam</h3>
+        <p>Le formulaire de contact inclut un champ invisible (honeypot). Les soumissions de robots qui remplissent ce champ sont silencieusement ignorees.</p>
+      </div>
+    </section>
+
+    {# ==================== 8. PORTAIL CLIENT ==================== #}
+    <section id="portail-client">
+      <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary-700">account_circle</span>
+        8. Portail client
+      </h2>
+      <div class="space-y-4 text-sm text-gray-700 dark:text-gray-300">
+        <p>Le portail client (<code>/portail/</code>) permet aux clients de suivre leurs projets, telecharger des documents et communiquer avec l'equipe.</p>
+
+        <h3 class="font-semibold text-gray-800 dark:text-gray-200">Donner acces a un client</h3>
+        <ol class="ml-4 list-decimal space-y-1">
+          <li>Creer le compte utilisateur et lui assigner le role "Client" (voir section 2)</li>
+          <li>Aller dans <strong>Relations clients &rarr; Portail client</strong></li>
+          <li>Cliquer "Ajouter" et selectionner l'utilisateur, le projet et le niveau d'acces</li>
+        </ol>
+
+        <h3 class="font-semibold text-gray-800 dark:text-gray-200">Niveaux d'acces</h3>
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b border-gray-200 dark:border-gray-700">
+              <th class="text-left py-2 px-3 font-medium text-gray-700 dark:text-gray-300">Niveau</th>
+              <th class="text-left py-2 px-3 font-medium text-gray-700 dark:text-gray-300">Permissions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-gray-100 dark:border-gray-800"><td class="py-2 px-3">Consultation (view)</td><td class="py-2 px-3">Voir le projet et telecharger les documents</td></tr>
+            <tr class="border-b border-gray-100 dark:border-gray-800"><td class="py-2 px-3">Commentaire (comment)</td><td class="py-2 px-3">Consultation + envoyer des messages</td></tr>
+            <tr><td class="py-2 px-3">Edition (edit)</td><td class="py-2 px-3">Acces complet au projet</td></tr>
+          </tbody>
+        </table>
+
+        <h3 class="font-semibold text-gray-800 dark:text-gray-200">Ce que voit le client</h3>
+        <ul class="ml-4 list-disc space-y-1">
+          <li><strong>Tableau de bord</strong> — liste des projets auxquels il a acces</li>
+          <li><strong>Detail du projet</strong> — informations + liste des documents telechargables</li>
+          <li><strong>Messages</strong> — boite de reception, envoi de messages au staff ou aux autres clients partageant un projet</li>
+        </ul>
+
+        <h3 class="font-semibold text-gray-800 dark:text-gray-200">Notifications automatiques</h3>
+        <ul class="ml-4 list-disc space-y-1">
+          <li>Un email est envoye au client lorsqu'un projet lui est attribue</li>
+          <li>Un email est envoye a tous les clients d'un projet lorsqu'un nouveau document est ajoute</li>
+        </ul>
+
+        <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+          <p class="font-medium text-blue-800 dark:text-blue-300">Documents securises</p>
+          <p class="text-blue-700 dark:text-blue-400">Les documents sont stockes sur Cloudflare R2. Les liens de telechargement sont signes et temporaires (securite).</p>
+        </div>
+      </div>
+    </section>
+
+    {# ==================== 9. CHATBOT ==================== #}
+    <section id="chatbot">
+      <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary-700">smart_toy</span>
+        9. Chatbot IA
+      </h2>
+      <div class="space-y-4 text-sm text-gray-700 dark:text-gray-300">
+        <p>Un assistant IA est disponible sur le site public. Il utilise l'API OpenAI (modele GPT-4o-mini) avec un prompt systeme en francais, enrichi des statistiques de l'entreprise.</p>
+
+        <h3 class="font-semibold text-gray-800 dark:text-gray-200">Fonctionnement</h3>
+        <ul class="ml-4 list-disc space-y-1">
+          <li>Les visiteurs envoient un message via l'interface de chat</li>
+          <li>La reponse est diffusee en temps reel (streaming SSE)</li>
+          <li>L'historique de conversation est conserve cote client (navigateur)</li>
+        </ul>
+
+        <h3 class="font-semibold text-gray-800 dark:text-gray-200">Protections</h3>
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b border-gray-200 dark:border-gray-700">
+              <th class="text-left py-2 px-3 font-medium text-gray-700 dark:text-gray-300">Protection</th>
+              <th class="text-left py-2 px-3 font-medium text-gray-700 dark:text-gray-300">Detail</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-gray-100 dark:border-gray-800"><td class="py-2 px-3">Limitation de debit</td><td class="py-2 px-3">20 requetes par IP toutes les 5 minutes</td></tr>
+            <tr class="border-b border-gray-100 dark:border-gray-800"><td class="py-2 px-3">Disjoncteur</td><td class="py-2 px-3">Apres 5 erreurs consecutives d'OpenAI, le chatbot est desactive pendant 5 minutes</td></tr>
+            <tr class="border-b border-gray-100 dark:border-gray-800"><td class="py-2 px-3">Taille du message</td><td class="py-2 px-3">Maximum 2 000 caracteres par message</td></tr>
+            <tr><td class="py-2 px-3">Historique</td><td class="py-2 px-3">Maximum 50 messages dans l'historique</td></tr>
+          </tbody>
+        </table>
+
+        <h3 class="font-semibold text-gray-800 dark:text-gray-200">Configuration</h3>
+        <p>La variable d'environnement <code>OPENAI_API_KEY</code> dans le fichier <code>.env</code> active le chatbot. Si elle est vide, le chatbot est desactive. Aucune interface d'administration n'est necessaire.</p>
+      </div>
+    </section>
+
+    {# ==================== 10. JOURNAL D'AUDIT ==================== #}
+    <section id="audit">
+      <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary-700">security</span>
+        10. Journal d'audit
+      </h2>
+      <div class="space-y-4 text-sm text-gray-700 dark:text-gray-300">
+        <p>Accessible via <strong>Systeme &rarr; Journal d'audit</strong>. Chaque creation, modification ou suppression est automatiquement enregistree.</p>
+
+        <h3 class="font-semibold text-gray-800 dark:text-gray-200">Entites suivies</h3>
+        <p>Projets, Articles, Contacts, Acces client (ClientProject), Messages, Modeles email, Regles d'attribution.</p>
+
+        <h3 class="font-semibold text-gray-800 dark:text-gray-200">Informations capturees</h3>
+        <ul class="ml-4 list-disc space-y-1">
+          <li><strong>Date et heure</strong> de l'action</li>
+          <li><strong>Utilisateur</strong> qui a effectue l'action (ou anonyme)</li>
+          <li><strong>Action</strong> : creation, modification, suppression</li>
+          <li><strong>Type et ID de l'entite</strong> concernee</li>
+          <li><strong>Adresse IP</strong> et <strong>User-Agent</strong> du navigateur</li>
+        </ul>
+
+        <div class="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4">
+          <p class="font-medium text-amber-800 dark:text-amber-300">Lecture seule</p>
+          <p class="text-amber-700 dark:text-amber-400">Le journal d'audit est en lecture seule. Il est impossible d'ajouter, modifier ou supprimer des entrees manuellement.</p>
+        </div>
+      </div>
+    </section>
+
+    {# ==================== 11. PARAMETRES ==================== #}
+    <section id="parametres">
+      <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary-700">settings</span>
+        11. Parametres du site
+      </h2>
+      <div class="space-y-4 text-sm text-gray-700 dark:text-gray-300">
+        <p>Accessible via <strong>Gestion du site &rarr; Parametres du site</strong>.</p>
+
+        <h3 class="font-semibold text-gray-800 dark:text-gray-200">Parametres existants</h3>
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b border-gray-200 dark:border-gray-700">
+              <th class="text-left py-2 px-3 font-medium text-gray-700 dark:text-gray-300">Cle</th>
+              <th class="text-left py-2 px-3 font-medium text-gray-700 dark:text-gray-300">Utilisation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-gray-100 dark:border-gray-800"><td class="py-2 px-3"><code>organigramme_image</code></td><td class="py-2 px-3">Image de l'organigramme affichee sur la page A propos</td></tr>
+            <tr><td class="py-2 px-3"><code>politique_qualite_image</code></td><td class="py-2 px-3">Image de la politique qualite ISO 9001 affichee sur la page A propos</td></tr>
+          </tbody>
+        </table>
+
+        <p>Pour mettre a jour une image, cliquer sur la cle concernee et telecharger une nouvelle image. La cle est en lecture seule (impossible de creer de nouveaux parametres depuis l'interface).</p>
+      </div>
+    </section>
+
+    {# ==================== 12. MAINTENANCE ==================== #}
+    <section id="maintenance">
+      <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary-700">terminal</span>
+        12. Maintenance & commandes
+      </h2>
+      <div class="space-y-4 text-sm text-gray-700 dark:text-gray-300">
+        <p>Commandes disponibles via le terminal du serveur.</p>
+
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b border-gray-200 dark:border-gray-700">
+              <th class="text-left py-2 px-3 font-medium text-gray-700 dark:text-gray-300">Commande</th>
+              <th class="text-left py-2 px-3 font-medium text-gray-700 dark:text-gray-300">Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-gray-100 dark:border-gray-800">
+              <td class="py-2 px-3"><code>python manage.py seed_content</code></td>
+              <td class="py-2 px-3">Initialise le contenu : images, articles, FAQ, equipe, parametres du site. Idempotent (peut etre relance sans risque). Option : <code>--dry-run</code></td>
+            </tr>
+            <tr class="border-b border-gray-100 dark:border-gray-800">
+              <td class="py-2 px-3"><code>python manage.py seed_projects</code></td>
+              <td class="py-2 px-3">Initialise les 63 projets de reference. Idempotent. Option : <code>--dry-run</code></td>
+            </tr>
+            <tr class="border-b border-gray-100 dark:border-gray-800">
+              <td class="py-2 px-3"><code>python scripts/seed_admin.py</code></td>
+              <td class="py-2 px-3">Cree les groupes (clients, admins), les cles SiteSetting et les 5 FAQ initiales</td>
+            </tr>
+            <tr class="border-b border-gray-100 dark:border-gray-800">
+              <td class="py-2 px-3"><code>python manage.py migrate</code></td>
+              <td class="py-2 px-3">Applique les migrations de base de donnees</td>
+            </tr>
+            <tr class="border-b border-gray-100 dark:border-gray-800">
+              <td class="py-2 px-3"><code>python manage.py collectstatic</code></td>
+              <td class="py-2 px-3">Collecte les fichiers statiques pour la production</td>
+            </tr>
+            <tr class="border-b border-gray-100 dark:border-gray-800">
+              <td class="py-2 px-3"><code>python manage.py createsuperuser</code></td>
+              <td class="py-2 px-3">Cree un nouveau compte superutilisateur</td>
+            </tr>
+            <tr>
+              <td class="py-2 px-3"><code>npm run build:css</code></td>
+              <td class="py-2 px-3">Compile le CSS Tailwind pour la production</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3 class="font-semibold text-gray-800 dark:text-gray-200">Variables d'environnement</h3>
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b border-gray-200 dark:border-gray-700">
+              <th class="text-left py-2 px-3 font-medium text-gray-700 dark:text-gray-300">Variable</th>
+              <th class="text-left py-2 px-3 font-medium text-gray-700 dark:text-gray-300">Requis</th>
+              <th class="text-left py-2 px-3 font-medium text-gray-700 dark:text-gray-300">Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-gray-100 dark:border-gray-800"><td class="py-2 px-3"><code>DJANGO_SECRET_KEY</code></td><td class="py-2 px-3">Oui</td><td class="py-2 px-3">Cle secrete Django (generee aleatoirement)</td></tr>
+            <tr class="border-b border-gray-100 dark:border-gray-800"><td class="py-2 px-3"><code>DATABASE_URL</code></td><td class="py-2 px-3">Oui</td><td class="py-2 px-3">URL de connexion PostgreSQL</td></tr>
+            <tr class="border-b border-gray-100 dark:border-gray-800"><td class="py-2 px-3"><code>DJANGO_ALLOWED_HOSTS</code></td><td class="py-2 px-3">Non</td><td class="py-2 px-3">Domaines autorises (separes par virgule)</td></tr>
+            <tr class="border-b border-gray-100 dark:border-gray-800"><td class="py-2 px-3"><code>OPENAI_API_KEY</code></td><td class="py-2 px-3">Non</td><td class="py-2 px-3">Cle API OpenAI (vide = chatbot desactive)</td></tr>
+            <tr><td class="py-2 px-3"><code>DEFAULT_FROM_EMAIL</code></td><td class="py-2 px-3">Non</td><td class="py-2 px-3">Adresse d'expediteur des emails (defaut : info@mygeoconsulting.com)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </div>
+</div>
+{% endblock %}
