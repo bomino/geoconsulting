@@ -79,13 +79,21 @@
         </p>
         <p class="mb-2 text-gray-600">Bonne visite.</p>
         <p class="mb-6 text-gray-600">Merci de nous faire confiance.</p>
+        {% if direction %}
         <div class="flex items-center gap-4 border-t border-gray-100 pt-6">
-          <img src="{% static 'img/DG_Pic.jpeg' %}" alt="Issaka Galadima Moustapha" class="h-14 w-14 rounded-full object-cover">
+          {% with dg=direction.0 %}
+          {% if dg.photo %}
+          <img src="{{ dg.photo.url }}" alt="{{ dg.full_name }}" class="h-14 w-14 rounded-full object-cover">
+          {% else %}
+          <div class="flex h-14 w-14 items-center justify-center rounded-full bg-primary-700 text-lg font-bold text-white">{{ dg.initials }}</div>
+          {% endif %}
           <div>
-            <p class="font-bold text-primary-800">Issaka Galadima Moustapha</p>
-            <p class="text-sm text-gray-500">Directeur Général</p>
+            <p class="font-bold text-primary-800">{{ dg.full_name }}</p>
+            <p class="text-sm text-gray-500">{{ dg.role }}</p>
           </div>
+          {% endwith %}
         </div>
+        {% endif %}
       </div>
     </div>
   </div>
